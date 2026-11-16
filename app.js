@@ -349,10 +349,12 @@ function createVideo() {
     </head>
     <body>
       <div id="screen">
-  <div>
-    <div style="font-size:75px;">🤵</div>
-    <div style="font-size:20px;color:#ffd700;">AVI</div>
-    <div id="caption">Your video is starting...</div>
+  <div style="text-align:center;">
+    <div style="font-size:90px;">🤵</div>
+    <div style="font-size:28px;color:#ffd700;font-weight:bold;">AVI</div>
+    <div id="caption" style="font-size:24px;color:white;margin-top:20px;">
+      Your video is starting...
+    </div>
   </div>
 </div>
       <script>
