@@ -348,7 +348,13 @@ function createVideo() {
       </style>
     </head>
     <body>
-      <div id="screen">Your video is starting...</div>
+      <div id="screen">
+  <div>
+    <div style="font-size:75px;">🤵</div>
+    <div style="font-size:20px;color:#ffd700;">AVI</div>
+    <div id="caption">Your video is starting...</div>
+  </div>
+</div>
       <script>
         const scenes = ${JSON.stringify(scenes)};
         let index = 0;
