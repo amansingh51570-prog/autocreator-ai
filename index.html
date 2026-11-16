@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131c">
+  <meta name="description" content="AutoCreator AI - your short-form content studio">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>AutoCreator AI</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">✦</span><span>AutoCreator <em>AI</em></span></div>
+    <span class="status"><i></i> Studio ready</span>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow">YOUR SHORT-FORM CONTENT STUDIO</p>
+      <h1>One idea.<br><span>Many possibilities.</span></h1>
+      <p class="sub">Create Hinglish Shorts & Reels for YouTube and Instagram.</p>
+    </section>
+
+    <section class="panel">
+      <label for="topic">What should we create today?</label>
+      <textarea id="topic" rows="3" placeholder="Example: 5 surprising facts about space"></textarea>
+      <div class="controls">
+        <div>
+          <label for="category">Content category</label>
+          <select id="category">
+            <option>Mixed content</option>
+            <option>Amazing facts</option>
+            <option>Motivation</option>
+            <option>Technology</option>
+            <option>Business</option>
+            <option>History & mysteries</option>
+            <option>Storytelling</option>
+          </select>
+        </div>
+        <div>
+          <label for="duration">Video length</label>
+          <select id="duration">
+            <option value="30">30 seconds</option>
+            <option value="45" selected>45 seconds</option>
+            <option value="60">60 seconds</option>
+          </select>
+        </div>
+      </div>
+      <button id="draftBtn" class="primary">Create script draft <span>→</span></button>
+      <p class="hint">Step 1 preview: script drafting UI. AI generation will be connected in the next build step.</p>
+    </section>
+
+    <section id="draftPanel" class="panel hidden" aria-live="polite">
+      <div class="panel-heading"><h2>Your content brief</h2><span class="tag">LOCAL DRAFT</span></div>
+      <p id="draftText"></p>
+      <button id="copyBtn" class="secondary">Copy brief</button>
+    </section>
+
+    <section class="section-title"><div><p class="eyebrow">YOUR WORKFLOW</p><h2>From idea to upload</h2></div></section>
+    <section class="steps">
+      <article class="step active"><b>01</b><div><strong>Script writer</strong><small>Topic, hook & Hinglish script</small></div><span>●</span></article>
+      <article class="step"><b>02</b><div><strong>Voiceover</strong><small>Natural Hindi-English narration</small></div><span>○</span></article>
+      <article class="step"><b>03</b><div><strong>Video maker</strong><small>Scenes, subtitles & music</small></div><span>○</span></article>
+      <article class="step"><b>04</b><div><strong>Publish</strong><small>YouTube Shorts & Instagram Reels</small></div><span>○</span></article>
+    </section>
+
+    <footer>AutoCreator AI · Starter build · More features coming step by step</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
