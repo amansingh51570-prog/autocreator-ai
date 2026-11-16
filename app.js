@@ -18,7 +18,6 @@ function addResultSection(container, heading, content) {
 
   const title = document.createElement("h3");
   title.textContent = heading;
-  title.style.marginBottom = "8px";
 
   const text = document.createElement("p");
   text.textContent = content || "Not available";
@@ -29,12 +28,138 @@ function addResultSection(container, heading, content) {
   container.appendChild(section);
 }
 
+function createThumbnail(container, title, idea) {
+  const section = document.createElement("div");
+  section.style.marginTop = "24px";
+
+  const heading = document.createElement("h3");
+  heading.textContent = "🎨 Your Free Thumbnail";
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 1280;
+  canvas.height = 720;
+  canvas.style.width = "100%";
+  canvas.style.height = "auto";
+  canvas.style.borderRadius = "14px";
+  canvas.style.display = "block";
+
+  const ctx = canvas.getContext("2d");
+
+  const gradient = ctx.createLinearGradient(0, 0, 1280, 720);
+  gradient.addColorStop(0, "#10105c");
+  gradient.addColorStop(0.5, "#5421a8");
+  gradient.addColorStop(1, "#ed416d");
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 1280, 720);
+
+  // Decorative circles
+  ctx.fillStyle = "rgba(255,255,255,0.10)";
+  ctx.beginPath();
+  ctx.arc(1100, 130, 180, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(80, 650, 230, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Small decorative stars
+  for (let i = 0; i < 45; i++) {
+    const x = (i * 197 + 83) % 1280;
+    const y = (i * 113 + 37) % 720;
+    ctx.fillStyle = "rgba(255,255,255,0.65)";
+    ctx.beginPath();
+    ctx.arc(x, y, 3 + (i % 3), 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Top label
+  ctx.fillStyle = "#ffd54a";
+  ctx.font = "bold 30px Arial";
+  ctx.fillText("AUTO CREATOR AI", 65, 75);
+
+  // Main title
+  const words = String(title || "AMAZING FACTS")
+    .toUpperCase()
+    .split(/\s+/);
+
+  const lines = [];
+  let line = "";
+
+  for (const word of words) {
+    const test = line ? line + " " + word : word;
+    if (ctx.measureText(test).width > 1050 && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+
+  if (line) lines.push(line);
+
+  const displayLines = lines.slice(0, 4);
+  const fontSize = displayLines.length > 2 ? 76 : 94;
+
+  ctx.font = `bold ${fontSize}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  const lineHeight = fontSize * 1.2;
+  const startY = 350 - ((displayLines.length - 1) * lineHeight) / 2;
+
+  displayLines.forEach((item, index) => {
+    const y = startY + index * lineHeight;
+
+    ctx.lineWidth = 12;
+    ctx.strokeStyle = "#17113c";
+    ctx.strokeText(item, 640, y);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(item, 640, y);
+  });
+
+  // Bottom label
+  ctx.fillStyle = "#ffd54a";
+  ctx.font = "bold 34px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("WATCH NOW!", 640, 645);
+
+  const downloadBtn = document.createElement("button");
+  downloadBtn.textContent = "⬇ Download Thumbnail PNG";
+  downloadBtn.style.width = "100%";
+  downloadBtn.style.marginTop = "14px";
+  downloadBtn.style.padding = "14px";
+  downloadBtn.style.borderRadius = "10px";
+  downloadBtn.style.border = "none";
+  downloadBtn.style.background = "#6c43dc";
+  downloadBtn.style.color = "white";
+  downloadBtn.style.fontWeight = "bold";
+
+  downloadBtn.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.download = "autocreator-thumbnail.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+
+  section.append(heading, canvas, downloadBtn);
+
+  if (idea) {
+    const note = document.createElement("p");
+    note.textContent = "AI thumbnail concept: " + idea;
+    note.style.marginTop = "12px";
+    section.appendChild(note);
+  }
+
+  container.appendChild(section);
+}
+
 draftBtn.addEventListener("click", async () => {
   const idea = topic.value.trim();
 
   if (!idea) {
     topic.focus();
-    topic.placeholder = "Pehle apna video topic likhiye…";
     return;
   }
 
@@ -50,9 +175,7 @@ draftBtn.addEventListener("click", async () => {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         topic: idea,
         category: category.value,
@@ -66,7 +189,7 @@ draftBtn.addEventListener("click", async () => {
     try {
       result = JSON.parse(raw);
     } catch {
-      throw new Error("Server returned an unreadable response. Please try again.");
+      throw new Error("Server returned an unreadable response.");
     }
 
     if (!response.ok || !result.success) {
@@ -75,11 +198,8 @@ draftBtn.addEventListener("click", async () => {
 
     draftText.textContent = result.script || "No script returned.";
 
-    draftPanel.querySelector("h2").textContent =
-      "Your AI-generated content";
-
-    draftPanel.querySelector(".tag").textContent =
-      "AI GENERATED";
+    const oldHeading = draftPanel.querySelector("h2");
+    if (oldHeading) oldHeading.textContent = "Your AI-generated content";
 
     const extraResults = document.createElement("div");
     extraResults.id = "extraResults";
@@ -95,6 +215,12 @@ draftBtn.addEventListener("click", async () => {
     addResultSection(extraResults, "#️⃣ Hashtags", hashtags);
     addResultSection(extraResults, "🖼️ Thumbnail Idea", result.thumbnail_idea);
 
+    createThumbnail(
+      extraResults,
+      result.title || idea,
+      result.thumbnail_idea
+    );
+
     copyBtn.textContent = "Copy script";
 
     draftPanel.scrollIntoView({
@@ -109,7 +235,7 @@ draftBtn.addEventListener("click", async () => {
       "\n\nPlease try again.";
   } finally {
     draftBtn.disabled = false;
-    draftBtn.innerHTML = 'Create script draft <span>→</span>';
+    draftBtn.textContent = "Create script draft →";
   }
 });
 
