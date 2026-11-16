@@ -272,7 +272,14 @@ function createVoiceover() {
   window.speechSynthesis.cancel();
 
   voiceoverUtterance = new SpeechSynthesisUtterance(script);
-  voiceoverUtterance.lang = "hi-IN";
+  const maleVoice = speechSynthesis.getVoices().find(v =>
+  v.lang.startsWith("hi") &&
+  /male|man|masculine/i.test(v.name)
+);
+
+if (maleVoice) {
+  voiceoverUtterance.voice = maleVoice;
+}
   voiceoverUtterance.rate = 0.95;
   voiceoverUtterance.pitch = 1;
 
