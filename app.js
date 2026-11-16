@@ -369,3 +369,18 @@ function createVideo() {
 
   videoWindow.document.close();
 }
+
+// AUTOCREATOR AI - AVI CHARACTER PROFILE
+const aviCharacter = {
+  name: "Avi",
+  type: "3D cartoon male",
+  outfit: "Modern casual hoodie",
+  language: "Hinglish",
+  voice: "Male",
+  speakingStyle: "Energetic and entertaining",
+  roles: [
+    "Direct-to-camera presenter",
+    "Animated story character"
+  ],
+  videoFormat: "9:16 portrait"
+};
