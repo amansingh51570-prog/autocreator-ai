@@ -360,7 +360,7 @@ function createVideo() {
         let index = 0;
 
         function showScene() {
-          document.getElementById("screen").textContent =
+          document.getElementById("caption").textContent =
             scenes[index];
 
           index = (index + 1) % scenes.length;
