@@ -290,14 +290,82 @@ function stopVoiceover() {
   window.speechSynthesis.cancel();
 }
 
-// AUTOMATIC VIDEO MAKER
+// AUTOMATIC VIDEO GENERATOR
 function createVideo() {
-  const script = document.getElementById("draftText").innerText;
+  const script = document.getElementById("draftText").innerText.trim();
 
-  if (!script.trim()) {
+  if (!script) {
     alert("Please generate a script first!");
     return;
   }
 
-  alert("Video Maker is being prepared. Next we will add scenes, captions and MP4 export!");
+  const scenes = script
+    .split(/[.!?।\n]+/)
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
+
+  if (!scenes.length) {
+    alert("No scenes found!");
+    return;
+  }
+
+  let videoWindow = window.open("", "_blank");
+
+  if (!videoWindow) {
+    alert("Please allow pop-ups for this website.");
+    return;
+  }
+
+  videoWindow.document.write(`
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>AutoCreator Video</title>
+      <style>
+        body {
+          margin: 0;
+          background: #000;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          font-family: Arial, sans-serif;
+        }
+        #screen {
+          width: min(100vw, 56.25vh);
+          aspect-ratio: 9 / 16;
+          background: linear-gradient(135deg, #141e30, #243b55);
+          color: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding: 25px;
+          box-sizing: border-box;
+          font-size: 30px;
+          font-weight: bold;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="screen">Your video is starting...</div>
+      <script>
+        const scenes = ${JSON.stringify(scenes)};
+        let index = 0;
+
+        function showScene() {
+          document.getElementById("screen").textContent =
+            scenes[index];
+
+          index = (index + 1) % scenes.length;
+        }
+
+        showScene();
+        setInterval(showScene, 4000);
+      <\/script>
+    </body>
+    </html>
+  `);
+
+  videoWindow.document.close();
 }
