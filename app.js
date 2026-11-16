@@ -7,8 +7,27 @@ const draftText = document.querySelector("#draftText");
 const draftBtn = document.querySelector("#draftBtn");
 const copyBtn = document.querySelector("#copyBtn");
 
-const API_URL =
-  "https://autocreator-api.amansingh51570.workers.dev";
+const API_URL = "https://autocreator-api.amansingh51570.workers.dev";
+
+function addResultSection(container, heading, content) {
+  const section = document.createElement("div");
+  section.style.marginTop = "20px";
+  section.style.padding = "14px";
+  section.style.borderRadius = "12px";
+  section.style.background = "rgba(128,128,128,0.12)";
+
+  const title = document.createElement("h3");
+  title.textContent = heading;
+  title.style.marginBottom = "8px";
+
+  const text = document.createElement("p");
+  text.textContent = content || "Not available";
+  text.style.whiteSpace = "pre-wrap";
+  text.style.overflowWrap = "anywhere";
+
+  section.append(title, text);
+  container.appendChild(section);
+}
 
 draftBtn.addEventListener("click", async () => {
   const idea = topic.value.trim();
@@ -20,11 +39,13 @@ draftBtn.addEventListener("click", async () => {
   }
 
   draftBtn.disabled = true;
-  draftBtn.textContent = "Generating your AI script...";
+  draftBtn.textContent = "Generating your content...";
 
   draftPanel.classList.remove("hidden");
-  draftText.textContent = "Gemini is writing your Hinglish script...";
-  draftPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  draftText.textContent = "Gemini is creating your content package...";
+
+  const oldResults = draftPanel.querySelector("#extraResults");
+  if (oldResults) oldResults.remove();
 
   try {
     const response = await fetch(API_URL, {
@@ -35,23 +56,44 @@ draftBtn.addEventListener("click", async () => {
       body: JSON.stringify({
         topic: idea,
         category: category.value,
-        duration: Number(duration.value)
+        duration: duration.value
       })
     });
 
-    const result = await response.json();
+    const raw = await response.text();
+    let result;
 
-    if (!response.ok || !result.success) {
-      throw new Error(result.details || result.error || "Script generation failed.");
+    try {
+      result = JSON.parse(raw);
+    } catch {
+      throw new Error("Server returned an unreadable response. Please try again.");
     }
 
-    draftText.textContent = result.script;
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Content generation failed.");
+    }
+
+    draftText.textContent = result.script || "No script returned.";
 
     draftPanel.querySelector("h2").textContent =
-      "Your AI-generated script";
+      "Your AI-generated content";
 
     draftPanel.querySelector(".tag").textContent =
       "AI GENERATED";
+
+    const extraResults = document.createElement("div");
+    extraResults.id = "extraResults";
+    draftText.after(extraResults);
+
+    addResultSection(extraResults, "🎬 Video Title", result.title);
+    addResultSection(extraResults, "📝 Video Description", result.description);
+
+    const hashtags = Array.isArray(result.hashtags)
+      ? result.hashtags.join(" ")
+      : result.hashtags || "";
+
+    addResultSection(extraResults, "#️⃣ Hashtags", hashtags);
+    addResultSection(extraResults, "🖼️ Thumbnail Idea", result.thumbnail_idea);
 
     copyBtn.textContent = "Copy script";
 
@@ -62,10 +104,9 @@ draftBtn.addEventListener("click", async () => {
 
   } catch (error) {
     draftText.textContent =
-      "Sorry! Script generation failed.\n\n" +
+      "Sorry! Content generation failed.\n\n" +
       error.message +
       "\n\nPlease try again.";
-
   } finally {
     draftBtn.disabled = false;
     draftBtn.innerHTML = 'Create script draft <span>→</span>';
