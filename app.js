@@ -1,44 +1,82 @@
+
 const topic = document.querySelector("#topic");
 const category = document.querySelector("#category");
 const duration = document.querySelector("#duration");
 const draftPanel = document.querySelector("#draftPanel");
 const draftText = document.querySelector("#draftText");
+const draftBtn = document.querySelector("#draftBtn");
+const copyBtn = document.querySelector("#copyBtn");
 
-document.querySelector("#draftBtn").addEventListener("click", () => {
+const API_URL =
+  "https://autocreator-api.amansingh51570.workers.dev";
+
+draftBtn.addEventListener("click", async () => {
   const idea = topic.value.trim();
+
   if (!idea) {
     topic.focus();
     topic.placeholder = "Pehle apna video topic likhiye…";
     return;
   }
-  const brief = `AUTOCREATOR AI — CONTENT BRIEF
 
-Topic: ${idea}
-Category: ${category.value}
-Language: Hinglish
-Target duration: ${duration.value} seconds
-Formats: YouTube Shorts + Instagram Reels
+  draftBtn.disabled = true;
+  draftBtn.textContent = "Generating your AI script...";
 
-SCRIPT STRUCTURE
-1. Hook (first 2–3 seconds): Start with a surprising question or bold statement.
-2. Main content: Explain the idea in simple, natural Hinglish.
-3. Retention: Add a curiosity gap or mini-reveal halfway through.
-4. Ending: Finish with a memorable takeaway and a natural call to action.
-
-VOICE & STYLE
-Energetic, conversational Hinglish. Short sentences. Avoid unsupported facts and copyrighted material.
-
-NEXT: Connect an AI text model to turn this brief into a complete timed script.`;
-  draftText.textContent = brief;
   draftPanel.classList.remove("hidden");
-  draftPanel.scrollIntoView({behavior:"smooth", block:"start"});
+  draftText.textContent = "Gemini is writing your Hinglish script...";
+  draftPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        topic: idea,
+        category: category.value,
+        duration: Number(duration.value)
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.details || result.error || "Script generation failed.");
+    }
+
+    draftText.textContent = result.script;
+
+    draftPanel.querySelector("h2").textContent =
+      "Your AI-generated script";
+
+    draftPanel.querySelector(".tag").textContent =
+      "AI GENERATED";
+
+    copyBtn.textContent = "Copy script";
+
+    draftPanel.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  } catch (error) {
+    draftText.textContent =
+      "Sorry! Script generation failed.\n\n" +
+      error.message +
+      "\n\nPlease try again.";
+
+  } finally {
+    draftBtn.disabled = false;
+    draftBtn.innerHTML = 'Create script draft <span>→</span>';
+  }
 });
 
-document.querySelector("#copyBtn").addEventListener("click", async () => {
+copyBtn.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(draftText.textContent);
-    document.querySelector("#copyBtn").textContent = "Copied ✓";
+    copyBtn.textContent = "Copied ✓";
   } catch {
-    document.querySelector("#copyBtn").textContent = "Select and copy the text";
+    copyBtn.textContent = "Select and copy the text";
   }
 });
