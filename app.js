@@ -252,3 +252,33 @@ copyBtn.addEventListener("click", async () => {
     copyBtn.textContent = "Select and copy the text";
   }
 });
+
+// FREE AI VOICEOVER FEATURE
+let voiceoverUtterance;
+
+function createVoiceover() {
+  const script = document.getElementById("draftText").innerText;
+
+  if (!script.trim()) {
+    alert("Please generate a script first!");
+    return;
+  }
+
+  if (!("speechSynthesis" in window)) {
+    alert("Voiceover is not supported by this browser.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  voiceoverUtterance = new SpeechSynthesisUtterance(script);
+  voiceoverUtterance.lang = "hi-IN";
+  voiceoverUtterance.rate = 0.95;
+  voiceoverUtterance.pitch = 1;
+
+  window.speechSynthesis.speak(voiceoverUtterance);
+}
+
+function stopVoiceover() {
+  window.speechSynthesis.cancel();
+}
