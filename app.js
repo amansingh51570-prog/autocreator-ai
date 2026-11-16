@@ -361,7 +361,7 @@ function createVideo() {
     <body>
       <div id="screen">
   <div style="text-align:center;">
-    <div style="font-size:90px;">🤵</div>
+    <img src="https://amansingh51570-prog.github.io/autocreator-ai/file_000000003440820897dc806d16d4f50a.png" alt="Avi" style="width:180px;height:220px;object-fit:contain;border-radius:16px;">
     <div style="font-size:28px;color:#ffd700;font-weight:bold;">AVI</div>
     <div id="caption" style="font-size:24px;color:white;margin-top:20px;">
       Your video is starting...
