@@ -332,19 +332,30 @@ function createVideo() {
           font-family: Arial, sans-serif;
         }
         #screen {
-          width: min(100vw, 56.25vh);
-          aspect-ratio: 9 / 16;
-          background: linear-gradient(135deg, #141e30, #243b55);
-          color: white;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          padding: 25px;
-          box-sizing: border-box;
-          font-size: 30px;
-          font-weight: bold;
-        }
+  width: min(100vw, 56.25vh);
+  aspect-ratio: 9 / 16;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 25px;
+  box-sizing: border-box;
+  font-size: 30px;
+  font-weight: bold;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+#screen > div {
+  width: 100%;
+}
+
+#caption {
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
       </style>
     </head>
     <body>
