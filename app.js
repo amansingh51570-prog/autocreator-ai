@@ -289,3 +289,15 @@ if (maleVoice) {
 function stopVoiceover() {
   window.speechSynthesis.cancel();
 }
+
+// AUTOMATIC VIDEO MAKER
+function createVideo() {
+  const script = document.getElementById("draftText").innerText;
+
+  if (!script.trim()) {
+    alert("Please generate a script first!");
+    return;
+  }
+
+  alert("Video Maker is being prepared. Next we will add scenes, captions and MP4 export!");
+}
