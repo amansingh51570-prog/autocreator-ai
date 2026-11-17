@@ -419,7 +419,6 @@ function createVideo() {
 }
 
         showScene();
-        setInterval(showScene, 4000);
       <\/script>
     </body>
     </html>
