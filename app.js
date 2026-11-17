@@ -392,8 +392,13 @@ function createVideo() {
         let index = 0;
 
         function showScene() {
-          document.getElementById("caption").textContent =
-            scenes[index];
+          const caption = document.getElementById("caption");
+caption.style.opacity = "0";
+
+setTimeout(() => {
+  caption.textContent = scenes[index];
+  caption.style.opacity = "1";
+}, 300);
 
           index = (index + 1) % scenes.length;
         }
