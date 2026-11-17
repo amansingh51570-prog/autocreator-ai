@@ -368,6 +368,13 @@ function createVideo() {
 #screen img {
   animation: aviMove 2s ease-in-out infinite;
 }
+#caption {
+  text-shadow: 2px 2px 8px #000;
+  transition: opacity 0.4s ease;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+}
       </style>
     </head>
     <body>
