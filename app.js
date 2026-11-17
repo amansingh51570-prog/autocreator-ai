@@ -396,7 +396,18 @@ function createVideo() {
 caption.style.opacity = "0";
 
 setTimeout(() => {
-  caption.textContent = scenes[index];
+  const words = scenes[index].split(" ");
+let wordIndex = 0;
+caption.textContent = "";
+
+const wordTimer = setInterval(() => {
+  if (wordIndex < words.length) {
+    caption.textContent += (wordIndex === 0 ? "" : " ") + words[wordIndex];
+    wordIndex++;
+  } else {
+    clearInterval(wordTimer);
+  }
+}, 300);
   caption.style.opacity = "1";
 }, 300);
 
