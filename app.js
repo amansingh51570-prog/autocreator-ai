@@ -392,27 +392,31 @@ function createVideo() {
         let index = 0;
 
         function showScene() {
-          const caption = document.getElementById("caption");
-caption.style.opacity = "0";
+  const caption = document.getElementById("caption");
+  const words = scenes[index].split(/\s+/);
+  let wordIndex = 0;
 
-setTimeout(() => {
-  const words = scenes[index].split(" ");
-let wordIndex = 0;
-caption.textContent = "";
+  caption.style.opacity = "0";
 
-const wordTimer = setInterval(() => {
-  if (wordIndex < words.length) {
-    caption.textContent += (wordIndex === 0 ? "" : " ") + words[wordIndex];
-    wordIndex++;
-  } else {
-    clearInterval(wordTimer);
-  }
-}, 300);
-  caption.style.opacity = "1";
-}, 300);
+  setTimeout(() => {
+    caption.textContent = "";
+    caption.style.opacity = "1";
 
-          index = (index + 1) % scenes.length;
-        }
+    const wordTimer = setInterval(() => {
+      if (wordIndex < words.length) {
+        caption.textContent +=
+          (wordIndex === 0 ? "" : " ") + words[wordIndex];
+
+        wordIndex++;
+      } else {
+        clearInterval(wordTimer);
+
+        index = (index + 1) % scenes.length;
+        setTimeout(showScene, 700);
+      }
+    }, 300);
+  }, 300);
+}
 
         showScene();
         setInterval(showScene, 4000);
