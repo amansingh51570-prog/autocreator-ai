@@ -356,6 +356,18 @@ function createVideo() {
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
+@keyframes aviMove {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+#screen img {
+  animation: aviMove 2s ease-in-out infinite;
+}
       </style>
     </head>
     <body>
